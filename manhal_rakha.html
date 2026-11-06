@@ -233,7 +233,17 @@
     body.night-mode table tbody tr:hover {
       background-color: #334155 !important;
     }
+  
+    /* Hide scrollbars for the top actions but allow horizontal scroll */
+    .hide-scrollbars::-webkit-scrollbar {
+      display: none;
+    }
+    .hide-scrollbars > * {
+      flex-shrink: 0;
+    }
+
   </style>
+<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 </head>
 <body class="min-h-screen flex flex-col pb-16 md:pb-0">
 
@@ -249,12 +259,17 @@
             <h1 class="text-xl font-extrabold tracking-tight">مَنحلي برو</h1>
             <span id="apiaryNameBadge" class="text-xs bg-amber-500/30 border border-amber-300/40 px-2.5 py-0.5 rounded-full text-amber-100">منحل الأطلس النموذجي</span>
           </div>
+              <span id="realTimeClockBadge" class="hidden md:inline-flex items-center gap-1.5 text-xs bg-amber-950/80 border border-amber-600/50 px-3 py-0.5 rounded-full text-amber-50 shadow-inner" dir="ltr">
+                  <i class="fa-regular fa-clock text-amber-400"></i>
+                  <span id="clockText" class="font-bold font-mono tracking-wider">--:--:--</span>
+                  <span id="dateText" class="ml-1.5 text-[10px] text-amber-200 font-bold border-l border-amber-700/50 pl-1.5">----/--/--</span>
+              </span>
           <p class="text-xs text-amber-200">نظام المتابعة الشاملة للمنحل عبر الفصول الأربعة بالاختيار السريع</p>
         </div>
       </div>
 
       <!-- Active Season Selector & Quick Actions -->
-      <div class="flex flex-wrap items-center gap-2">
+      <div class="flex items-center gap-2 overflow-x-auto pb-1 flex-nowrap hide-scrollbars" style="scrollbar-width: none; -ms-overflow-style: none;">
         <div class="flex items-center bg-amber-950/60 border border-amber-700/70 rounded-xl p-1 text-xs">
           <span class="px-2 text-amber-200 font-semibold"><i class="fa-solid fa-calendar-day ml-1"></i>الفصل الحالي:</span>
           <button type="button" data-season-switch="spring" class="season-top-btn px-2.5 py-1 rounded-lg transition font-semibold">🌱 الربيع</button>
@@ -344,7 +359,7 @@
     </div>
 
     <!-- Navigation Tabs -->
-    <nav class="bg-amber-950/80 border-t border-amber-800/70">
+    <nav class="hidden md:block bg-amber-950/80 border-t border-amber-800/70">
       <div class="max-w-7xl mx-auto px-2 sm:px-4 flex items-center gap-1 overflow-x-auto py-1.5 text-xs sm:text-sm">
         <button type="button" data-tab="dashboard" class="nav-tab-btn px-3 py-2 rounded-lg font-bold flex items-center gap-2 whitespace-nowrap transition bg-amber-500 text-amber-950">
           <i class="fa-solid fa-chart-pie"></i><span>لوحة القيادة</span>
@@ -374,7 +389,7 @@
           <i class="fa-solid fa-leaf"></i><span>دليل ومهام الفصول الأربعة</span>
         </button>
         <button type="button" data-tab="health" class="nav-tab-btn px-3 py-2 rounded-lg font-semibold flex items-center gap-2 whitespace-nowrap transition text-amber-100 hover:bg-amber-800/60">
-          <i class="fa-solid fa-kit-medical"></i><span>التغذية والعلاجات</span>
+          <i class="fa-solid fa-kit-medical"></i><span>طبيب المنحل والتغذية</span>
         </button>
         <button type="button" data-tab="harvest" class="nav-tab-btn px-3 py-2 rounded-lg font-semibold flex items-center gap-2 whitespace-nowrap transition text-amber-100 hover:bg-amber-800/60">
           <i class="fa-solid fa-jar"></i><span>الإنتاج والمالية</span>
@@ -464,7 +479,7 @@
           <!-- Icon: Varroa Infestation Diagnostic -->
           <button type="button" id="btnScreenIconVarroaCalc" class="group p-3.5 rounded-2xl border-2 border-rose-300 bg-gradient-to-b from-rose-50 to-white hover:border-rose-600 hover:shadow-md transition flex flex-col items-center text-center gap-2">
             <div class="w-12 h-12 rounded-2xl bg-rose-700 text-white flex items-center justify-center text-2xl shadow group-hover:scale-105 transition">
-              <i class="fa-solid fa-shield-virus"></i>
+              <i class="fa-solid fa-user-doctor text-white mr-1"></i>
             </div>
             <div>
               <div class="text-xs sm:text-sm font-extrabold text-slate-800">تشخيص الفاروا</div>
@@ -527,14 +542,14 @@
             </div>
           </button>
 
-          <!-- Icon 9: Health & Feeding -->
-          <button type="button" data-launch-tab="health" class="screen-icon-btn group p-3.5 rounded-2xl border-2 border-purple-200 bg-gradient-to-b from-purple-50 to-white hover:border-purple-500 hover:shadow-md transition flex flex-col items-center text-center gap-2">
-            <div class="w-12 h-12 rounded-2xl bg-purple-600 text-white flex items-center justify-center text-2xl shadow group-hover:scale-105 transition">
-              <i class="fa-solid fa-kit-medical"></i>
+          <!-- Icon 9: Apiary Doctor & Health -->
+          <button type="button" data-launch-tab="health" class="screen-icon-btn group p-3.5 rounded-2xl border-2 border-rose-300 bg-gradient-to-b from-rose-50 to-white hover:border-rose-600 hover:shadow-md transition flex flex-col items-center text-center gap-2">
+            <div class="w-12 h-12 rounded-2xl bg-rose-600 text-white flex items-center justify-center text-2xl shadow group-hover:scale-105 transition">
+              <i class="fa-solid fa-user-doctor"></i>
             </div>
             <div>
-              <div class="text-xs sm:text-sm font-extrabold text-slate-800">التغذية والعلاجات</div>
-              <div class="text-[10px] text-slate-500 font-semibold">الفاروا والمحلول والكاندي</div>
+              <div class="text-xs sm:text-sm font-extrabold text-slate-800">طبيب المنحل</div>
+              <div class="text-[10px] text-rose-700 font-bold">تشخيص وعلاج الأمراض</div>
             </div>
           </button>
 
@@ -776,7 +791,7 @@
       </div>
 
       <!-- Alerts & Quick Seasonal Tasks Row -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-5">
         <!-- Urgent Hive Alerts -->
         <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 flex flex-col">
           <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-100">
@@ -801,7 +816,51 @@
           <div id="dashSeasonalChecklist" class="space-y-2 flex-1 overflow-y-auto max-h-72"></div>
         </div>
 
+        
+        <!-- Flora Tracker Widget -->
+        <div class="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl border border-emerald-200 shadow-sm p-4 flex flex-col">
+          <div class="flex items-center justify-between pb-3 mb-3 border-b border-emerald-100/80">
+            <h3 class="font-bold text-emerald-950 flex items-center gap-2">
+              <i class="fa-brands fa-pagelines text-emerald-600 text-lg"></i>
+              <span>مرصد التزهير والمراعي (مناخ السهوب)</span>
+            </h3>
+            <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-200 text-emerald-900 font-bold">تتبع الرحيق</span>
+          </div>
+          <div class="space-y-3">
+            <div>
+              <div class="flex items-center justify-between text-xs mb-1">
+                <span class="font-extrabold text-slate-700">🌳 الكاليبتوس / الخروب</span>
+                <span class="text-slate-500 font-semibold">خريفي / شتوي</span>
+              </div>
+              <div class="w-full bg-slate-200 rounded-full h-1.5">
+                <div class="bg-emerald-500 h-1.5 rounded-full" style="width: 25%"></div>
+              </div>
+            </div>
+            
+            <div>
+              <div class="flex items-center justify-between text-xs mb-1">
+                <span class="font-extrabold text-slate-700">🌼 السدر اليمني / الشوكيات</span>
+                <span class="text-amber-600 font-extrabold animate-pulse">ذروة التزهير (فيض)</span>
+              </div>
+              <div class="w-full bg-slate-200 rounded-full h-1.5">
+                <div class="bg-amber-500 h-1.5 rounded-full" style="width: 85%"></div>
+              </div>
+            </div>
+            
+            <div>
+              <div class="flex items-center justify-between text-xs mb-1">
+                <span class="font-extrabold text-slate-700">🌿 إكليل الجبل / الزيتون</span>
+                <span class="text-slate-500 font-semibold">نمو وتزهير مبكر</span>
+              </div>
+              <div class="w-full bg-slate-200 rounded-full h-1.5">
+                <div class="bg-purple-500 h-1.5 rounded-full" style="width: 15%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
         <!-- Recent Logs Feed -->
+
         <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 flex flex-col">
           <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-100">
             <h3 class="font-bold text-slate-800 flex items-center gap-2">
@@ -875,7 +934,7 @@
       </div>
 
       <!-- Current Weather & Inspection Decision Card -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-5">
         <div id="weatherMainDecisionBox" class="lg:col-span-2 bg-white rounded-2xl border-2 border-emerald-300 shadow-sm p-5 flex flex-col justify-between space-y-4">
           <div class="flex flex-wrap items-start justify-between gap-3">
             <div class="space-y-1">
@@ -1279,8 +1338,16 @@
 
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
             <div class="md:col-span-2">
-              <label for="inspCustomNotes" class="block text-xs font-bold text-slate-700 mb-1">ملاحظة نصية إضافية أو تذكير للفحص القادم (اختياري)</label>
-              <input type="text" id="inspCustomNotes" placeholder="مثال: الفحص القادم إضافة إطار شمع أساس رقم 8 أو مراقبة البيوت الملكية..." class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2.5 text-sm focus:outline-none focus:border-amber-500" />
+              <label for="inspCustomNotes" class="block text-xs font-bold text-slate-700 mb-1 flex justify-between items-center">
+                <span>ملاحظة نصية إضافية أو تذكير للفحص القادم (اختياري)</span>
+                <button type="button" id="btnVoiceDictation" class="text-emerald-600 hover:text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-2 py-1 rounded-lg text-[11px] font-extrabold flex items-center gap-1.5 transition shadow-sm" title="إملاء صوتي للملاحظات">
+                  <i class="fa-solid fa-microphone"></i> إملاء صوتي
+                </button>
+              </label>
+              <div class="relative">
+                <input type="text" id="inspCustomNotes" placeholder="مثال: الفحص القادم إضافة إطار شمع أساس... (أو اضغط الميكروفون للتحدث)" class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2.5 text-sm focus:outline-none focus:border-amber-500 pr-10" />
+                <i id="voiceIndicator" class="fa-solid fa-microphone-lines animate-pulse text-rose-500 absolute right-3 top-3 hidden text-lg"></i>
+              </div>
             </div>
             <div class="flex items-end">
               <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-2.5 px-5 rounded-xl shadow-md flex items-center justify-center gap-2 transition text-sm">
@@ -1571,7 +1638,7 @@
       </div>
 
       <!-- Scientific Reference Calendar & Annual Queen Marking Color Chart -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-5">
         <div class="lg:col-span-2 bg-white rounded-2xl border border-slate-200 shadow-sm p-4 sm:p-5 space-y-3">
           <h3 class="font-extrabold text-slate-800 text-sm flex items-center gap-2">
             <i class="fa-solid fa-calendar-check text-amber-600"></i>
@@ -1674,8 +1741,11 @@
           </h3>
           <p class="text-[11px] text-slate-500">أدخل رقم الخلية (مثلاً 1 إلى 10) أو رمز الباركود (`MH-001`) لفتح الخلية أو فحصها فوراً:</p>
           <div class="flex gap-2">
+            <button type="button" id="btnStartCameraScanner" class="bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs px-3 py-2 rounded-xl transition shrink-0 shadow" title="مسح بالكاميرا">
+              <i class="fa-solid fa-camera text-lg"></i>
+            </button>
             <input type="text" id="barcodeSearchInput" placeholder="مثال: MH-001 أو 5..." class="flex-1 rounded-xl border border-slate-300 bg-slate-50 px-3 py-2 text-xs font-bold focus:outline-none focus:border-amber-500" />
-            <button type="button" id="btnTriggerBarcodeLookup" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-3.5 py-2 rounded-xl transition">
+            <button type="button" id="btnTriggerBarcodeLookup" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-3.5 py-2 rounded-xl transition shrink-0 shadow">
               فتح وفحص
             </button>
           </div>
@@ -1980,7 +2050,7 @@
               <i class="fa-solid fa-shield-virus"></i>
             </div>
             <div>
-              <h3 class="text-base font-extrabold text-slate-900">حاسبة نسبة إصابة الفاروا وتشخيص العلاج الدقيق</h3>
+              <h3 class="text-base font-extrabold text-slate-900">طبيب المنحل: تشخيص الأمراض وحاسبة نسبة إصابة الفاروا</h3>
               <p class="text-xs text-slate-500">حساب علمي لمستوى تساقط أو نسبة إصابة النحل بالفاروا وتقدير خطورة الوضع مع توجيه العلاج</p>
             </div>
           </div>
@@ -2198,39 +2268,80 @@
 
         <!-- Finance Registration -->
         <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 sm:p-5 space-y-4">
-          <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
             <h3 class="font-extrabold text-slate-800 flex items-center gap-2">
               <i class="fa-solid fa-wallet text-teal-600"></i>
-              <span>حساب المصاريف والمداخيل (د.ج)</span>
+              <span>سجل الحسابات المالية (د.ج)</span>
             </h3>
+            <div class="flex flex-wrap items-center gap-2 text-xs font-bold">
+              <span class="bg-emerald-50 text-emerald-800 border border-emerald-200 px-2.5 py-1 rounded-lg">المداخيل: <span id="finSumIncome">0</span></span>
+              <span class="bg-rose-50 text-rose-800 border border-rose-200 px-2.5 py-1 rounded-lg">المصاريف: <span id="finSumExpense">0</span></span>
+              <span class="bg-teal-50 text-teal-900 border border-teal-300 px-2.5 py-1 rounded-lg">الصافي: <span id="finSumNet" class="font-extrabold">0</span></span>
+            </div>
           </div>
 
-          <form id="financeForm" class="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-slate-50 p-3.5 rounded-xl border border-slate-200">
-            <div>
-              <label for="finType" class="block text-xs font-bold text-slate-700 mb-1">نوع العملية</label>
-              <select id="finType" class="w-full rounded-lg border border-slate-300 bg-white px-2.5 py-2 text-xs font-bold">
-                <option value="income">➕ مدخول مبيعات (عسل / طرود)</option>
-                <option value="expense">➖ مصروف (شمع / تغذية / صناديق / علاج)</option>
-              </select>
+
+          
+          <form id="financeForm" class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 space-y-3">
+            <!-- Type Toggle -->
+            <div class="flex gap-2">
+              <label class="flex-1 cursor-pointer">
+                <input type="radio" name="finTypeRadio" value="expense" checked class="peer hidden" />
+                <div class="text-center px-3 py-2 rounded-xl border-2 border-slate-200 peer-checked:border-rose-500 peer-checked:bg-rose-50 peer-checked:text-rose-700 font-extrabold text-xs transition">
+                  <i class="fa-solid fa-arrow-trend-down"></i> تسجيل مصروف (شراء)
+                </div>
+              </label>
+              <label class="flex-1 cursor-pointer">
+                <input type="radio" name="finTypeRadio" value="income" class="peer hidden" />
+                <div class="text-center px-3 py-2 rounded-xl border-2 border-slate-200 peer-checked:border-emerald-500 peer-checked:bg-emerald-50 peer-checked:text-emerald-700 font-extrabold text-xs transition">
+                  <i class="fa-solid fa-arrow-trend-up"></i> تسجيل مدخول (بيع)
+                </div>
+              </label>
             </div>
-            <div>
-              <label for="finAmount" class="block text-xs font-bold text-slate-700 mb-1">المبلغ (د.ج)</label>
-              <input type="number" step="100" id="finAmount" value="5000" min="1" class="w-full rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 text-xs font-bold" />
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label for="finCategory" class="block text-[11px] font-bold text-slate-700 mb-1">التصنيف</label>
+                <select id="finCategory" class="w-full rounded-lg border border-slate-300 bg-white px-2.5 py-2 text-xs font-bold focus:border-teal-500"></select>
+              </div>
+              <div>
+                <label for="finItem" class="block text-[11px] font-bold text-slate-700 mb-1">المنتوج / السلعة</label>
+                <select id="finItem" class="w-full rounded-lg border border-slate-300 bg-white px-2.5 py-2 text-xs font-bold focus:border-teal-500"></select>
+              </div>
             </div>
-            <div>
-              <label for="finDesc" class="block text-xs font-bold text-slate-700 mb-1">البيان / الوصف</label>
-              <input type="text" id="finDesc" value="شراء شمع أساس وتغذية سكرية" placeholder="وصف العملية..." class="w-full rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 text-xs font-bold" />
+
+            <div class="grid grid-cols-3 gap-2">
+              <div>
+                <label for="finQty" class="block text-[11px] font-bold text-slate-700 mb-1">الكمية</label>
+                <input type="number" step="0.1" min="0.1" id="finQty" value="1" class="w-full rounded-lg border border-slate-300 bg-white px-2 py-1.5 text-xs font-extrabold text-slate-800 text-center" />
+              </div>
+              <div>
+                <label for="finUnitPrice" class="block text-[11px] font-bold text-slate-700 mb-1">سعر الوحدة (د.ج)</label>
+                <input type="number" step="10" min="0" id="finUnitPrice" value="0" class="w-full rounded-lg border border-slate-300 bg-white px-2 py-1.5 text-xs font-extrabold text-slate-800 text-center" />
+              </div>
+              <div>
+                <label for="finTotal" class="block text-[11px] font-bold text-slate-700 mb-1">المجموع (د.ج)</label>
+                <input type="text" id="finTotal" readonly value="0" class="w-full rounded-lg border border-teal-300 bg-teal-50 px-2 py-1.5 text-xs font-extrabold text-teal-900 text-center" />
+              </div>
             </div>
-            <div>
-              <label for="finDate" class="block text-xs font-bold text-slate-700 mb-1">التاريخ</label>
-              <input type="date" id="finDate" class="w-full rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 text-xs font-bold" />
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label for="finDesc" class="block text-[11px] font-bold text-slate-700 mb-1">وصف إضافي (اختياري)</label>
+                <input type="text" id="finDesc" placeholder="ملاحظة..." class="w-full rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 text-xs font-semibold" />
+              </div>
+              <div>
+                <label for="finDate" class="block text-[11px] font-bold text-slate-700 mb-1">التاريخ</label>
+                <input type="date" id="finDate" class="w-full rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 text-xs font-bold" />
+              </div>
             </div>
-            <div class="sm:col-span-2">
-              <button type="submit" class="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-3 rounded-lg text-xs shadow transition">
-                <i class="fa-solid fa-plus ml-1"></i>حفظ العملية المالية
-              </button>
-            </div>
+
+            <button type="submit" class="w-full bg-teal-600 hover:bg-teal-700 text-white font-extrabold py-2 px-3 rounded-lg text-xs shadow-md transition flex items-center justify-center gap-1.5">
+              <i class="fa-solid fa-plus"></i><span>حفظ العملية المالية في السجل</span>
+            </button>
           </form>
+
 
           <div id="financeListContainer" class="space-y-2.5 max-h-80 overflow-y-auto"></div>
         </div>
@@ -2572,7 +2683,7 @@
   </main>
 
   <!-- ==================== MODAL: QUICK FEEDING ICON (أيقونة التغذية بالكمية والنوع والوحدة سائلة/صلبة) ==================== -->
-  <div id="quickFeedingModal" class="fixed inset-0 bg-slate-900/65 backdrop-blur-xs z-50 hidden items-center justify-center p-4 no-print overflow-y-auto">
+  <div id="quickFeedingModal" class="fixed inset-0 bg-slate-900/65 backdrop-blur-xs z-[100] hidden items-start py-8 justify-center p-4 no-print overflow-y-auto">
     <div class="bg-white rounded-2xl max-w-lg w-full p-5 shadow-2xl border-2 border-amber-400 space-y-4 my-auto">
       <div class="flex items-center justify-between border-b border-amber-100 pb-3">
         <div class="flex items-center gap-2.5">
@@ -2652,7 +2763,7 @@
   </div>
 
   <!-- ==================== MODAL: ADD / EDIT HIVE ==================== -->
-  <div id="hiveModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden items-center justify-center p-4 no-print">
+  <div id="hiveModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-[100] hidden items-start py-8 justify-center p-4 no-print">
     <div class="bg-white rounded-2xl max-w-lg w-full p-5 shadow-2xl border border-slate-200 space-y-4">
       <div class="flex items-center justify-between border-b border-slate-100 pb-3">
         <h3 id="hiveModalTitle" class="font-extrabold text-slate-800 text-base flex items-center gap-2">
@@ -2675,10 +2786,18 @@
             <label for="hiveTypeInput" class="block text-xs font-bold text-slate-700 mb-1">نوع الصندوق</label>
             <select id="hiveTypeInput" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm font-bold">
               <option value="لانجستروث (10 إطارات)">لانجستروث (10 إطارات)</option>
-              <option value="لانجستروث بعاسلة">لانجستروث بعاسلة</option>
+              <option value="لانجستروث (8 إطارات)">لانجستروث (8 إطارات)</option>
               <option value="دادان (10 إطارات)">دادان (10 إطارات)</option>
               <option value="نوية تلقيح / طرد (5 إطارات)">نوية تلقيح / طرد (5 إطارات)</option>
             </select>
+          </div>
+          <div>
+            <label for="hiveSupersCount" class="block text-xs font-bold text-slate-700 mb-1">عدد العاسلات المضافة</label>
+            <input type="number" id="hiveSupersCount" min="0" max="5" value="0" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm font-bold" />
+          </div>
+          <div>
+            <label for="hiveSuperFrames" class="block text-xs font-bold text-slate-700 mb-1">إطارات العاسلة (مبنية/عسل)</label>
+            <input type="number" id="hiveSuperFrames" min="0" max="50" value="0" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm font-bold" />
           </div>
           <div>
             <label for="hiveBreedInput" class="block text-xs font-bold text-slate-700 mb-1">سلالة النحل</label>
@@ -2724,7 +2843,24 @@
             <input type="number" id="hiveFramesHoneyInput" min="0" max="15" value="3" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm font-bold" />
           </div>
         </div>
-        <div>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3 p-3 bg-amber-50/50 rounded-xl border border-amber-200">
+          <div>
+            <label for="hiveGeneticsInput" class="block text-[11px] font-bold text-amber-950 mb-1">التقييم الوراثي للسلالة (الانتخاب)</label>
+            <select id="hiveGeneticsInput" class="w-full rounded-lg border border-amber-300 bg-white px-2 py-1.5 text-xs font-bold">
+              <option value="ممتازة (أمهات للتربية)">⭐⭐⭐⭐⭐ ممتازة (أمهات للتربية)</option>
+              <option value="جيدة جداً (إنتاج عسل)">⭐⭐⭐⭐ جيدة جداً (إنتاج عسل)</option>
+              <option value="متوسطة (عادية)">⭐⭐⭐ متوسطة (عادية)</option>
+              <option value="شرسة / ميالة للتطريد">⭐⭐ شرسة / ميالة للتطريد (للتغيير)</option>
+            </select>
+          </div>
+          <div>
+            <label for="hiveWoodTypeInput" class="block text-[11px] font-bold text-amber-950 mb-1">بيانات العتاد (نجارة الصندوق وسنة الصنع)</label>
+            <input type="text" id="hiveWoodTypeInput" placeholder="مثال: خشب أحمر، تعشيق، صنع 2025..." class="w-full rounded-lg border border-amber-300 bg-white px-2 py-1.5 text-xs" />
+          </div>
+        </div>
+        
+        <div class="mt-3">
           <label for="hiveNotesInput" class="block text-xs font-bold text-slate-700 mb-1">ملاحظة خاصة بالخلية</label>
           <input type="text" id="hiveNotesInput" placeholder="مثال: ملكة فتية منتجة، هادئة على الإطارات..." class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm" />
         </div>
@@ -2738,7 +2874,7 @@
   </div>
 
   <!-- ==================== MODAL: SETTINGS & BACKUP ==================== -->
-  <div id="settingsModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden items-center justify-center p-4 no-print">
+  <div id="settingsModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-[100] hidden items-start py-8 justify-center p-4 no-print">
     <div class="bg-white rounded-2xl max-w-md w-full p-5 shadow-2xl border border-slate-200 space-y-4">
       <div class="flex items-center justify-between border-b border-slate-100 pb-3">
         <h3 class="font-extrabold text-slate-800 text-base flex items-center gap-2">
@@ -2817,7 +2953,7 @@
   </nav>
 
   <!-- ==================== MODAL: PARTNER SHARE & MOBILE INSTALL ==================== -->
-  <div id="partnerShareModal" class="fixed inset-0 bg-slate-900/65 backdrop-blur-xs z-50 hidden items-center justify-center p-3 sm:p-4 no-print overflow-y-auto">
+  <div id="partnerShareModal" class="fixed inset-0 bg-slate-900/65 backdrop-blur-xs z-[100] hidden items-start py-8 justify-center p-3 sm:p-4 no-print overflow-y-auto">
     <div class="bg-white rounded-2xl max-w-2xl w-full p-4 sm:p-6 shadow-2xl border border-slate-200 space-y-5 my-auto max-h-[92vh] overflow-y-auto">
       <div class="flex items-center justify-between border-b border-slate-100 pb-3">
         <div class="flex items-center gap-2.5">
@@ -2946,7 +3082,7 @@
   </div>
 
   <!-- ==================== MODAL: ADD / EDIT SWARM (تسيير الطرود) ==================== -->
-  <div id="swarmModal" class="fixed inset-0 bg-slate-900/65 backdrop-blur-xs z-50 hidden items-center justify-center p-4 no-print overflow-y-auto">
+  <div id="swarmModal" class="fixed inset-0 bg-slate-900/65 backdrop-blur-xs z-[100] hidden items-start py-8 justify-center p-4 no-print overflow-y-auto">
     <div class="bg-white rounded-2xl max-w-lg w-full p-5 shadow-2xl border border-amber-200 space-y-4 my-auto">
       <div class="flex items-center justify-between border-b border-slate-100 pb-3">
         <h3 id="swarmModalTitle" class="font-extrabold text-amber-950 text-base flex items-center gap-2">
@@ -3010,7 +3146,7 @@
   </div>
 
   <!-- ==================== MODAL: PER-HIVE / PER-SWARM HONEY & POLLEN EXTRACTION WINDOW ==================== -->
-  <div id="extractionModal" class="fixed inset-0 bg-slate-900/65 backdrop-blur-xs z-50 hidden items-center justify-center p-3 sm:p-4 no-print overflow-y-auto">
+  <div id="extractionModal" class="fixed inset-0 bg-slate-900/65 backdrop-blur-xs z-[100] hidden items-start py-8 justify-center p-3 sm:p-4 no-print overflow-y-auto">
     <div class="bg-white rounded-2xl max-w-2xl w-full p-4 sm:p-6 shadow-2xl border border-amber-300 space-y-4 my-auto max-h-[92vh] overflow-y-auto">
       <div class="flex items-center justify-between border-b border-amber-100 pb-3">
         <div class="flex items-center gap-2.5">
@@ -3086,7 +3222,7 @@
   </div>
 
   <!-- ==================== MODAL: ADD / EDIT QUEEN REARING BATCH (دفعة تربية ملكات) ==================== -->
-  <div id="queenBatchModal" class="fixed inset-0 bg-slate-900/65 backdrop-blur-xs z-50 hidden items-center justify-center p-4 no-print overflow-y-auto">
+  <div id="queenBatchModal" class="fixed inset-0 bg-slate-900/65 backdrop-blur-xs z-[100] hidden items-start py-8 justify-center p-4 no-print overflow-y-auto">
     <div class="bg-white rounded-2xl max-w-lg w-full p-5 shadow-2xl border border-amber-300 space-y-4 my-auto">
       <div class="flex items-center justify-between border-b border-slate-100 pb-3">
         <h3 id="queenBatchModalTitle" class="font-extrabold text-amber-950 text-base flex items-center gap-2">
@@ -3164,7 +3300,7 @@
   </button>
 
   <!-- ==================== MODAL: INSTALL DIRECT ICON ON PHONE / DESKTOP SCREEN ==================== -->
-  <div id="installIconModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-xs z-50 hidden items-center justify-center p-4 no-print overflow-y-auto">
+  <div id="installIconModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-xs z-[100] hidden items-start py-8 justify-center p-4 no-print overflow-y-auto">
     <div class="bg-white rounded-2xl max-w-lg w-full p-5 shadow-2xl border-2 border-amber-300 space-y-4 my-auto">
       <div class="flex items-center justify-between border-b border-slate-100 pb-3">
         <div class="flex items-center gap-3">
@@ -3230,7 +3366,7 @@
   </div>
 
   <!-- ==================== PIN LOCK SCREEN OVERLAY ==================== -->
-  <div id="pinLockOverlay" class="fixed inset-0 bg-amber-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-4 no-print">
+  <div id="pinLockOverlay" class="fixed inset-0 bg-amber-950/95 backdrop-blur-md z-[100] hidden items-start py-8 justify-center p-4 no-print">
     <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-amber-300 text-center space-y-4">
       <div class="w-14 h-14 rounded-2xl bg-amber-400 text-amber-950 mx-auto flex items-center justify-center text-3xl font-bold shadow">
         <i class="fa-solid fa-lock"></i>
@@ -3250,7 +3386,7 @@
   </div>
 
   <!-- ==================== MODAL: SAFE DELETE CONFIRMATION ==================== -->
-  <div id="confirmDeleteModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-xs z-50 hidden items-center justify-center p-4 no-print">
+  <div id="confirmDeleteModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-xs z-[100] hidden items-start py-8 justify-center p-4 no-print">
     <div class="bg-white rounded-2xl max-w-md w-full p-5 shadow-2xl border-2 border-rose-300 space-y-4">
       <div class="flex items-center gap-3">
         <div class="w-11 h-11 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center text-xl font-bold shrink-0">
@@ -3277,7 +3413,7 @@
   </div>
 
   <!-- ==================== MODAL: TRASH BIN & RESTORE (سلة المحذوفات والاسترجاع) ==================== -->
-  <div id="trashModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-xs z-50 hidden items-center justify-center p-3 sm:p-4 no-print overflow-y-auto">
+  <div id="trashModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-xs z-[100] hidden items-start py-8 justify-center p-3 sm:p-4 no-print overflow-y-auto">
     <div class="bg-white rounded-2xl max-w-2xl w-full p-4 sm:p-6 shadow-2xl border-2 border-amber-300 space-y-4 my-auto max-h-[90vh] flex flex-col">
       <div class="flex items-center justify-between border-b border-slate-100 pb-3">
         <div class="flex items-center gap-2.5">
@@ -3310,6 +3446,26 @@
       </div>
 
       <div id="trashItemsListContainer" class="space-y-2.5 overflow-y-auto flex-1 pr-1 max-h-96"></div>
+    </div>
+  </div>
+
+  
+  <!-- ==================== MODAL: CAMERA BARCODE SCANNER ==================== -->
+  <div id="cameraScannerModal" class="fixed inset-0 bg-slate-900/90 backdrop-blur-sm z-[120] hidden flex-col items-center justify-center p-4 no-print">
+    <div class="bg-white rounded-2xl w-full max-w-md overflow-hidden shadow-2xl flex flex-col">
+      <div class="bg-slate-800 text-white p-3.5 flex justify-between items-center">
+        <h3 class="font-extrabold text-sm flex items-center gap-2">
+          <i class="fa-solid fa-camera"></i>
+          <span>مسح الباركود بكاميرا الهاتف</span>
+        </h3>
+        <button type="button" id="btnCloseScannerModal" class="text-slate-300 hover:text-white text-xl px-2">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div id="reader" class="w-full bg-black min-h-[300px]"></div>
+      <div class="p-3 text-center text-xs text-slate-600 font-bold bg-slate-50 border-t border-slate-200">
+        وجّه الكاميرا نحو باركود الخلية ليتم مسحه وفتح نافذة الفحص فوراً
+      </div>
     </div>
   </div>
 
@@ -4664,7 +4820,10 @@
                 </div>
                 <div class="flex items-center justify-between">
                   <span class="font-semibold"><i class="fa-regular fa-calendar-check text-blue-500 ml-1"></i>آخر فحص:</span>
-                  <span class="font-bold text-slate-800">${h.lastInspection || '-'}</span>
+                  <div class="flex items-center gap-1.5">
+                    <span class="font-bold text-slate-800">${h.lastInspection || '-'}</span>
+                    <button type="button" data-quick-date-hive="${h.id}" class="btn-quick-date text-[10px] bg-blue-100 hover:bg-blue-200 text-blue-800 font-extrabold px-1.5 py-0.5 rounded transition shadow-sm" title="تحديث تاريخ الفحص لليوم وحفظ التغييرات">اليوم</button>
+                  </div>
                 </div>
                 ${h.notes ? `<div class="p-2 rounded-lg bg-slate-50 border border-slate-200/80 text-slate-700 mt-1.5 font-medium">${h.notes}</div>` : ''}
               </div>
@@ -4802,20 +4961,53 @@
       }
 
       const finEl = document.getElementById('financeListContainer');
+      
+      let sumInc = 0;
+      let sumExp = 0;
+      appState.finances.forEach(f => {
+        if (f.type === 'income') sumInc += Number(f.amount) || 0;
+        else sumExp += Number(f.amount) || 0;
+      });
+      
+      const elInc = document.getElementById('finSumIncome');
+      const elExp = document.getElementById('finSumExpense');
+      const elNet = document.getElementById('finSumNet');
+      if(elInc) elInc.textContent = sumInc.toLocaleString('ar-DZ');
+      if(elExp) elExp.textContent = sumExp.toLocaleString('ar-DZ');
+      if(elNet) {
+        const net = sumInc - sumExp;
+        elNet.textContent = net.toLocaleString('ar-DZ');
+        elNet.className = net >= 0 ? 'text-emerald-700 font-extrabold' : 'text-rose-700 font-extrabold';
+      }
+
       if (appState.finances.length === 0) {
-        finEl.innerHTML = `<div class="text-xs text-slate-400 text-center py-4">لا توجد عمليات مالية بعد</div>`;
+        finEl.innerHTML = `<div class="text-xs text-slate-400 text-center py-4">لا توجد عمليات مالية مسجلة</div>`;
       } else {
-        finEl.innerHTML = appState.finances.map(f => `
-          <div class="p-3 rounded-xl border ${f.type === 'income' ? 'bg-emerald-50/60 border-emerald-200' : 'bg-rose-50/50 border-rose-200'} flex items-center justify-between gap-2">
-            <div>
-              <div class="text-xs font-extrabold ${f.type === 'income' ? 'text-emerald-800' : 'text-rose-800'}">
-                ${f.type === 'income' ? '+' : '-'} ${Number(f.amount).toLocaleString('ar-DZ')} د.ج — ${f.desc}
+        finEl.innerHTML = appState.finances.map(f => {
+          const isInc = f.type === 'income';
+          const icon = isInc ? '<i class="fa-solid fa-arrow-trend-up"></i>' : '<i class="fa-solid fa-arrow-trend-down"></i>';
+          const colorClass = isInc ? 'bg-emerald-50 border-emerald-200' : 'bg-rose-50 border-rose-200';
+          const textClass = isInc ? 'text-emerald-800' : 'text-rose-800';
+          const sign = isInc ? '+' : '-';
+          
+          return `
+          <div class="p-3.5 rounded-xl border ${colorClass} flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="space-y-1">
+              <div class="text-sm font-extrabold ${textClass} flex items-center gap-1.5">
+                ${icon} <span>${sign} ${Number(f.amount).toLocaleString('ar-DZ')} د.ج</span>
               </div>
-              <div class="text-[11px] text-slate-500 mt-0.5">${f.date}</div>
+              <div class="text-xs font-bold text-slate-700">${f.desc}</div>
+              <div class="text-[10px] font-semibold text-slate-500 flex items-center gap-2">
+                <span class="bg-white px-2 py-0.5 rounded border border-slate-200">${f.category || 'عام'}</span>
+                <span>📅 ${f.date}</span>
+              </div>
             </div>
-            <button type="button" data-del-fin="${f.id}" class="btn-del-fin text-slate-400 hover:text-rose-600 p-1"><i class="fa-solid fa-trash text-xs"></i></button>
+            <button type="button" data-del-fin="${f.id}" class="btn-del-fin text-slate-400 hover:text-rose-600 bg-white border border-slate-200 p-2 rounded-lg transition shrink-0 self-end sm:self-auto" title="حذف العملية">
+              <i class="fa-solid fa-trash"></i>
+            </button>
           </div>
-        `).join('');
+        `;
+        }).join('');
       }
     }
 
@@ -4922,12 +5114,44 @@
       `;
     }
 
+    // ==================== REAL-TIME CLOCK ====================
+    function updateRealTimeClock() {
+      const clockEl = document.getElementById('clockText');
+      const dateEl = document.getElementById('dateText');
+      if (clockEl && dateEl) {
+        const now = new Date();
+        
+        const hrs = String(now.getHours()).padStart(2, '0');
+        const mins = String(now.getMinutes()).padStart(2, '0');
+        const secs = String(now.getSeconds()).padStart(2, '0');
+        clockEl.textContent = `${hrs}:${mins}:${secs}`;
+        
+        const yyyy = now.getFullYear();
+        const mm = String(now.getMonth() + 1).padStart(2, '0');
+        const dd = String(now.getDate()).padStart(2, '0');
+        dateEl.textContent = `${yyyy}/${mm}/${dd}`;
+      }
+    }
+    setInterval(updateRealTimeClock, 1000);
+    document.addEventListener('DOMContentLoaded', updateRealTimeClock);
+
     // ==================== LIVE WEATHER & APIARY INSPECTION SUITABILITY ENGINE ====================
     function evaluateInspectionWeather(tempC, windKmh, precipMm, rainProb = 0, wCode = 0) {
       const t = Number(tempC);
       const w = Number(windKmh);
       const p = Number(precipMm);
       const rp = Number(rainProb);
+
+      const hour = new Date().getHours();
+      let timeStatus = 'good';
+      let timeAdvice = '⏰ الوقت الحالي مناسب للفحص.';
+      if (hour < 8 || hour > 17) {
+          timeStatus = 'bad';
+          timeAdvice = '⏰ تنبيه: الوقت الحالي (' + hour + ':00) غير مناسب للفحص (خارج أوقات نشاط النحل المثلى).';
+      } else if (hour < 10 || hour > 15) {
+          timeStatus = 'warn';
+          timeAdvice = '⏰ ملاحظة: الوقت الحالي (' + hour + ':00) مقبول لكنه ليس الأفضل.';
+      }
 
       let inspectorOptionValue = 'مشمس ومعتدل ☀️';
       if (p > 0.3 || rp >= 50 || wCode >= 51) {
@@ -4943,16 +5167,16 @@
       }
 
       // Suitability evaluation for opening beehives
-      if (t < 14 || p > 0.5 || rp >= 60 || w >= 28) {
+      if (t < 14 || p > 0.5 || rp >= 60 || w >= 28 || timeStatus === 'bad') {
         return {
           status: 'bad',
           badgeText: '🔴 غير مناسب لفتح الخلايا اليوم',
           title: '🔴 لا ينصح بفتح الخلايا وفحص الحضنة في هذا الطقس',
-          advice: t < 14
+          advice: timeAdvice + '\n' + (t < 14
             ? `الحرارة منخفضة (${t}°C < 15°C)؛ فتح الخلية يعرّض الحضنة للبرد والموت. اكتفِ بمراقبة المدخل الخارجي فقط.`
             : w >= 28
             ? `الرياح قوية (${w} كم/سا) وتسبب هيجان النحل وصعوبة الفحص وبرودة الحضنة.`
-            : `احتمال الأمطار والتقلبات الجوية مرتفع؛ أجّل الفحص ليوم مشمس وهادئ.`,
+            : `احتمال الأمطار والتقلبات الجوية مرتفع؛ أجّل الفحص ليوم مشمس وهادئ.`),
           inspectorWeather: inspectorOptionValue,
           dotClass: 'bg-rose-400',
           cardBorder: 'border-rose-300',
@@ -4960,12 +5184,12 @@
         };
       }
 
-      if ((t >= 14 && t < 18) || (t > 34 && t <= 38) || (w >= 20 && w < 28) || (rp >= 35 && rp < 60)) {
+      if ((t >= 14 && t < 18) || (t > 34 && t <= 38) || (w >= 20 && w < 28) || (rp >= 35 && rp < 60) || timeStatus === 'warn') {
         return {
           status: 'warn',
           badgeText: '🟡 فحص سريع للضرورة فقط',
           title: '🟡 جو متوسط: مسموح بفحص خاطف وسريع للضرورة فقط',
-          advice: `الحرارة (${t}°C) والرياح (${w} كم/سا) تسمح بتدخل سريع (مثل وضع التغذية أو الشرائط) مع عدم إطالة كشف إطارات الحضنة.`,
+          advice: timeAdvice + '\n' + `الحرارة (${t}°C) والرياح (${w} كم/سا) تسمح بتدخل سريع (مثل وضع التغذية أو الشرائط) مع عدم إطالة كشف إطارات الحضنة.`,
           inspectorWeather: inspectorOptionValue,
           dotClass: 'bg-amber-300',
           cardBorder: 'border-amber-300',
@@ -4977,7 +5201,7 @@
         status: 'good',
         badgeText: '🟢 جو مثالي لفحص الخلايا',
         title: '🟢 الجو مناسب ومثالي لفحص الخلايا والملكات اليوم',
-        advice: `درجة الحرارة (${t}°C) وسرعة الرياح (${w} كم/سا) ممتازة لسروح النحل؛ يمكنك فحص الحضنة، البحث عن الملكة، أو التقسيم بأمان.`,
+        advice: timeAdvice + '\n' + `درجة الحرارة (${t}°C) وسرعة الرياح (${w} كم/سا) ممتازة لسروح النحل؛ يمكنك فحص الحضنة، البحث عن الملكة، أو التقسيم بأمان.`,
         inspectorWeather: inspectorOptionValue,
         dotClass: 'bg-emerald-300',
         cardBorder: 'border-emerald-300',
@@ -6053,6 +6277,70 @@
     }
 
     
+    
+    // ==================== FINANCE CATALOG & LOGIC ====================
+    const FINANCE_CATALOG = {
+      expense: {
+        categories: {
+          'تغذية النحل': ['عجينة كاندي سكرية', 'عجينة بروتينية', 'سكر خشن (للمحلول)', 'فيتامينات ومنشطات', 'حبوب لقاح للتغذية', 'خميرة / صويا (بدائل)'],
+          'صناديق وعتاد خشبي': ['صندوق تربية كامل (10 إطارات)', 'صندوق نوية (5 إطارات)', 'عاسلة', 'إطارات خشبية (كوادر)', 'قاعدة صندوق', 'غطاء خارجي', 'مغذية بلاستيكية/خشبية'],
+          'لوازم الشمع والإطارات': ['شمع أساس', 'سلك مجلفن للإطارات', 'مسامير', 'مساسيك (Agrafes)', 'مساكة سلك (Tendeur)', 'عجلة تثبيت الشمع'],
+          'أدوات النحال والألبسة': ['بدلة نحل كاملة', 'قناع رأس', 'قفازات جلدية', 'مدخنة', 'عتلة (Lève-cadre)', 'فرشاة نحل', 'كرسي منحل'],
+          'أدوية وعلاجات بيطرية': ['شرائط أبيفار', 'شرائط بايفارول', 'حمض الأوكساليك', 'حمض الفورميك', 'أدوية النوزيما', 'أبيلايف فار / ثيمول'],
+          'صيانة وتجهيز': ['طلاء / دهان صناديق', 'زيت الكتان', 'غراء خشب', 'شريط لاصق', 'أقمشة وخيش للتغطية'],
+          'تعليب وتسويق': ['قنينات زجاجية (بلارات)', 'ملصقات تجارية (Labels)', 'أكياس تعليب'],
+          'مصاريف أخرى': ['بنزين / نقل للمنحل', 'أجرة عمال', 'كراء أرض / مرعى', 'أخرى...']
+        }
+      },
+      income: {
+        categories: {
+          'منتجات الخلية (عسل)': ['عسل سدر جبلي', 'عسل أزهار ربيعي', 'عسل كاليبتوس', 'عسل شوكيات', 'عسل لبان/صحراوي', 'شمع خام'],
+          'منتجات علاجية وغذائية': ['حبوب لقاح جافة', 'عكبر خام (بروبوليس)', 'صبغة العكبر (Propolis Tincture)', 'غذاء ملكي'],
+          'نحل وطرود': ['طرد نحل (5 إطارات)', 'خلية نحل كاملة', 'ملكة ملقحة', 'ملكة عذراء', 'بيت ملكي'],
+          'خدمات ومداخيل أخرى': ['تأجير خلايا للتلقيح الزراعي', 'استشارات نحلية', 'أخرى...']
+        }
+      }
+    };
+
+    function initFinanceFormUI() {
+      const typeRadios = document.querySelectorAll('input[name="finTypeRadio"]');
+      const catSel = document.getElementById('finCategory');
+      const itemSel = document.getElementById('finItem');
+      const qtyInp = document.getElementById('finQty');
+      const priceInp = document.getElementById('finUnitPrice');
+      const totalInp = document.getElementById('finTotal');
+
+      if(!catSel) return;
+
+      const updateCategories = () => {
+        const type = document.querySelector('input[name="finTypeRadio"]:checked').value;
+        const cats = Object.keys(FINANCE_CATALOG[type].categories);
+        catSel.innerHTML = cats.map(c => `<option value="${c}">${c}</option>`).join('');
+        updateItems();
+      };
+
+      const updateItems = () => {
+        const type = document.querySelector('input[name="finTypeRadio"]:checked').value;
+        const cat = catSel.value;
+        const items = FINANCE_CATALOG[type].categories[cat] || [];
+        itemSel.innerHTML = items.map(i => `<option value="${i}">${i}</option>`).join('');
+      };
+
+      const calcTotal = () => {
+        const q = parseFloat(qtyInp.value) || 0;
+        const p = parseFloat(priceInp.value) || 0;
+        totalInp.value = (q * p).toLocaleString('ar-DZ');
+      };
+
+      typeRadios.forEach(r => r.addEventListener('change', updateCategories));
+      catSel.addEventListener('change', updateItems);
+      qtyInp.addEventListener('input', calcTotal);
+      priceInp.addEventListener('input', calcTotal);
+
+      // Trigger initial load
+      updateCategories();
+    }
+
     // ==================== EVENT LISTENERS ====================
     window.addEventListener('DOMContentLoaded', () => {
       // Set default dates
@@ -6067,6 +6355,7 @@
       // Initialize PWA Offline Engine & Sunlight Mode
       initPWAAndOfflineEngine();
       initSunlightAndFullscreen();
+      initFinanceFormUI();
 
       // Wintering & Candy Calculator listeners
       const wcalcH = document.getElementById('wcalcHiveSelect');
@@ -6296,6 +6585,37 @@
 
       // Delegated clicks for chips & dynamic buttons
       document.body.addEventListener('click', e => {
+        
+        const quickDateBtn = e.target.closest('.btn-quick-date');
+        if (quickDateBtn) {
+          const hId = quickDateBtn.getAttribute('data-quick-date-hive');
+          const hive = appState.hives.find(h => h.id === hId);
+          if (hive) {
+             hive.lastInspection = todayISO();
+             
+             // Quick log entry
+             appState.logs.unshift({
+                id: 'L' + Date.now(),
+                date: todayISO(),
+                hiveId: hive.id,
+                hiveName: hive.name,
+                season: appState.currentSeason,
+                weather: document.getElementById('inspWeatherSelect') ? document.getElementById('inspWeatherSelect').value : 'مشمس ومعتدل ☀️',
+                tasks: ['تفقد سريع للحالة العامة'],
+                observations: ['حالة مستقرة (تسجيل سريع)'],
+                framesBees: hive.framesBees,
+                framesBrood: hive.framesBrood,
+                framesHoney: hive.framesHoney,
+                customNotes: 'تم تحديث تاريخ الفحص من البطاقة مباشرة'
+             });
+             
+             saveState();
+             renderAll();
+             showToast(`✅ تم تحديث تاريخ الفحص وحفظ التغييرات لخلية ${hive.name} لليوم`);
+          }
+          return;
+        }
+
         const taskChip = e.target.closest('[data-task-chip]');
         if (taskChip) {
           const t = taskChip.getAttribute('data-task-chip');
@@ -6701,19 +7021,41 @@
         showToast('تم تسجيل الإنتاج بنجاح');
       });
 
-      // Finance Form
+      // Detailed Finance Form Submission
       document.getElementById('financeForm').addEventListener('submit', e => {
         e.preventDefault();
+        const type = document.querySelector('input[name="finTypeRadio"]:checked').value;
+        const cat = document.getElementById('finCategory').value;
+        const item = document.getElementById('finItem').value;
+        const qty = parseFloat(document.getElementById('finQty').value) || 1;
+        const unitPrice = parseFloat(document.getElementById('finUnitPrice').value) || 0;
+        const amount = qty * unitPrice;
+        const desc = document.getElementById('finDesc').value.trim();
+        
+        let fullDesc = `${item} (الكمية: ${qty} × ${unitPrice.toLocaleString('ar-DZ')} د.ج)`;
+        if(desc) fullDesc += ` - ${desc}`;
+
         appState.finances.unshift({
           id: 'FN' + Date.now(),
-          type: document.getElementById('finType').value,
-          amount: Number(document.getElementById('finAmount').value) || 0,
-          desc: document.getElementById('finDesc').value.trim() || 'عملية مالية',
+          type: type,
+          category: cat,
+          item: item,
+          qty: qty,
+          unitPrice: unitPrice,
+          amount: amount,
+          desc: fullDesc,
           date: document.getElementById('finDate').value || todayISO()
         });
+        
+        // Reset inputs
+        document.getElementById('finQty').value = '1';
+        document.getElementById('finUnitPrice').value = '0';
+        document.getElementById('finTotal').value = '0';
+        document.getElementById('finDesc').value = '';
+        
         saveState();
         renderAll();
-        showToast('تم حفظ العملية المالية');
+        showToast('تم حفظ العملية المالية بنجاح');
       });
 
       // Logs Filter, CSV & Print
@@ -9055,6 +9397,344 @@
         });
       }
     }
+
+    // --- 1. نظام الإملاء الصوتي (Web Speech API) ---
+    document.addEventListener('DOMContentLoaded', () => {
+      const btnVoice = document.getElementById('btnVoiceDictation');
+      const noteInput = document.getElementById('inspCustomNotes');
+      const voiceIndicator = document.getElementById('voiceIndicator');
+      
+      if (btnVoice && ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+        recognition.lang = 'ar-DZ'; // اللهجة الجزائرية / العربية
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        
+        btnVoice.addEventListener('click', (e) => {
+          e.preventDefault();
+          try {
+            recognition.start();
+            btnVoice.classList.replace('text-emerald-600', 'text-rose-600');
+            btnVoice.classList.replace('bg-emerald-50', 'bg-rose-50');
+            btnVoice.innerHTML = '<i class="fa-solid fa-stop"></i> جاري الاستماع...';
+            if (voiceIndicator) voiceIndicator.classList.remove('hidden');
+          } catch(err) {
+            // Already started
+          }
+        });
+        
+        recognition.onresult = (event) => {
+          const transcript = event.results[0][0].transcript;
+          if (noteInput.value) {
+            noteInput.value += ' - ' + transcript;
+          } else {
+            noteInput.value = transcript;
+          }
+        };
+        
+        recognition.onend = () => {
+          btnVoice.classList.replace('text-rose-600', 'text-emerald-600');
+          btnVoice.classList.replace('bg-rose-50', 'bg-emerald-50');
+          btnVoice.innerHTML = '<i class="fa-solid fa-microphone"></i> إملاء صوتي';
+          if (voiceIndicator) voiceIndicator.classList.add('hidden');
+        };
+        
+        recognition.onerror = (e) => {
+          console.error("Speech Recognition Error: ", e.error);
+          btnVoice.classList.replace('text-rose-600', 'text-emerald-600');
+          btnVoice.classList.replace('bg-rose-50', 'bg-emerald-50');
+          btnVoice.innerHTML = '<i class="fa-solid fa-microphone"></i> إملاء صوتي';
+          if (voiceIndicator) voiceIndicator.classList.add('hidden');
+        };
+      } else if (btnVoice) {
+        btnVoice.style.display = 'none'; // المتصفح لا يدعم
+      }
+      
+      // --- 2. نظام حماية السعة القصوى للإطارات (Validator) ---
+      const hiveModalForm = document.getElementById('hiveModalForm');
+      if (hiveModalForm) {
+        hiveModalForm.addEventListener('submit', function(e) {
+          const typeSelect = document.getElementById('hiveTypeInput').value;
+          let boxCapacity = 10;
+          if (typeSelect.includes('8')) boxCapacity = 8;
+          else if (typeSelect.includes('5')) boxCapacity = 5;
+          
+          const supersCount = parseInt(document.getElementById('hiveSupersCount')?.value) || 0;
+          const superFrames = parseInt(document.getElementById('hiveSuperFrames')?.value) || 0;
+          
+          const beesFrames = parseInt(document.getElementById('hiveFramesBeesInput').value) || 0;
+          const broodFrames = parseInt(document.getElementById('hiveFramesBroodInput').value) || 0;
+          const honeyFrames = parseInt(document.getElementById('hiveFramesHoneyInput').value) || 0;
+          
+          const totalCapacity = boxCapacity + (supersCount * boxCapacity);
+          const currentTotalContent = broodFrames + honeyFrames;
+          
+          if (beesFrames > totalCapacity || currentTotalContent > totalCapacity) {
+             e.preventDefault();
+             e.stopImmediatePropagation();
+             alert(`⚠️ خطأ في الإدخال: إجمالي عدد الإطارات يتجاوز السعة.\nنوع الصندوق يتسع لـ (${boxCapacity}) إطارات مع (${supersCount}) عاسلة، لذا السعة القصوى هي: ${totalCapacity} إطار.\nأدخلت: ${beesFrames} نحل، ${currentTotalContent} (حضنة+عسل).`);
+             return false;
+          }
+          
+          if (supersCount > 0 && superFrames > (supersCount * boxCapacity)) {
+             e.preventDefault();
+             e.stopImmediatePropagation();
+             alert(`⚠️ خطأ في الإدخال: عدد إطارات العاسلة (${superFrames}) أكبر من السعة القصوى المسموحة للعاسلات المضافة (${supersCount * boxCapacity}).`);
+             return false;
+          }
+        }, false);
+      }
+      
+      // --- 3. عرض التوقيت الحالي في شريط الطقس ---
+      const dashWeatherMetricsLine = document.getElementById('dashWeatherMetricsLine');
+      if(dashWeatherMetricsLine) {
+         const hour = new Date().getHours();
+         const min = new Date().getMinutes().toString().padStart(2, '0');
+         if(!dashWeatherMetricsLine.innerText.includes('الساعة')) {
+             dashWeatherMetricsLine.innerText += ` | الساعة: ${hour}:${min}`;
+         }
+      }
+
+      // --- 4. تفعيل التنقل بين الأقسام (Tabs) عبر الأيقونات والقوائم ---
+      
+      // دالة مساعدة لفتح النوافذ المنبثقة (Modals) بجميع خصائصها
+      function openModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+          modal.classList.remove('hidden');
+          modal.classList.add('flex');
+          document.body.style.overflow = 'hidden'; // إخفاء تمرير الشاشة الخلفية
+        }
+      }
+      
+      // دالة مساعدة لإغلاق النوافذ المنبثقة
+      function closeModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+          modal.classList.add('hidden');
+          modal.classList.remove('flex');
+          document.body.style.overflow = ''; // إعادة التمرير
+        }
+      }
+
+      // تفعيل أيقونات الشاشة الرئيسية (الفحص السريع، الطرود، كود بار... إلخ) التي تفتح أقساماً أخرى
+      document.querySelectorAll('[data-launch-tab]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          const tabId = btn.getAttribute('data-launch-tab');
+          if (tabId) {
+            switchTab(tabId);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
+        });
+      });
+
+      // تفعيل قائمة التنقل العلوية
+      document.querySelectorAll('.nav-tab-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          const tabId = btn.getAttribute('data-tab');
+          if (tabId) {
+            switchTab(tabId);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
+        });
+      });
+
+      // تفعيل القائمة السفلية للموبايل
+      document.querySelectorAll('.mobile-bottom-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          const tabId = btn.getAttribute('data-mobile-nav');
+          if (tabId) {
+            switchTab(tabId);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
+        });
+      });
+
+      // --- 5. تفعيل الأيقونات التي تفتح نوافذ منبثقة (Modals) ---
+      
+      // نافذة فرز العسل
+      const btnExtract = document.getElementById('btnScreenIconExtraction');
+      if(btnExtract) btnExtract.addEventListener('click', () => openModal('extractionModal'));
+      const btnCloseExtract = document.getElementById('btnCloseExtractionModal');
+      if(btnCloseExtract) btnCloseExtract.addEventListener('click', () => closeModal('extractionModal'));
+      const btnOpenExtractTop = document.getElementById('btnOpenExtractionModal');
+      if(btnOpenExtractTop) btnOpenExtractTop.addEventListener('click', () => openModal('extractionModal'));
+
+      // نافذة التغذية السريعة
+      const btnQuickFeed = document.getElementById('btnScreenIconQuickFeeding');
+      if(btnQuickFeed) btnQuickFeed.addEventListener('click', () => openModal('quickFeedingModal'));
+      const btnCloseQuickFeed = document.getElementById('btnCloseQuickFeedingModal');
+      if(btnCloseQuickFeed) btnCloseQuickFeed.addEventListener('click', () => closeModal('quickFeedingModal'));
+
+      // نافذة حاسبة التشتية (من الشاشة الرئيسية)
+      const btnWinterCalc = document.getElementById('btnScreenIconWinterCalc');
+      if(btnWinterCalc) btnWinterCalc.addEventListener('click', () => {
+         // إذا كان المستخدم في الرئيسية، نمرر الصفحة للأسفل قليلاً ليرى الحاسبة
+         document.getElementById('winteringCalcCard').scrollIntoView({ behavior: 'smooth' });
+      });
+
+      // نافذة تشخيص الفاروا (تأخذك لقسم الصحة)
+      const btnVarroaCalc = document.getElementById('btnScreenIconVarroaCalc');
+      if(btnVarroaCalc) btnVarroaCalc.addEventListener('click', () => {
+         switchTab('health');
+         window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      // نافذة إضافة خلية
+      const btnAddHive = document.getElementById('btnOpenAddHiveModal');
+      if(btnAddHive) btnAddHive.addEventListener('click', () => openModal('hiveModal'));
+      const btnCloseHive = document.getElementById('btnCloseHiveModal');
+      if(btnCloseHive) btnCloseHive.addEventListener('click', () => closeModal('hiveModal'));
+      
+      // نافذة إضافة طرد
+      const btnAddSwarm = document.getElementById('btnOpenAddSwarmModal');
+      if(btnAddSwarm) btnAddSwarm.addEventListener('click', () => openModal('swarmModal'));
+      const btnCloseSwarm = document.getElementById('btnCloseSwarmModal');
+      if(btnCloseSwarm) btnCloseSwarm.addEventListener('click', () => closeModal('swarmModal'));
+      
+      // نافذة بدء تربية الملكات
+      const btnAddQueenBatch = document.getElementById('btnOpenNewQueenBatchModal');
+      if(btnAddQueenBatch) btnAddQueenBatch.addEventListener('click', () => openModal('queenBatchModal'));
+      const btnCloseQueenBatch = document.getElementById('btnCloseQueenBatchModal');
+      if(btnCloseQueenBatch) btnCloseQueenBatch.addEventListener('click', () => closeModal('queenBatchModal'));
+
+      // نافذة التثبيت
+      const btnInstallBanner = document.getElementById('btnQuickInstallBanner');
+      if(btnInstallBanner) btnInstallBanner.addEventListener('click', () => openModal('installIconModal'));
+      const btnInstallTop = document.getElementById('btnInstallHomeIconModal');
+      if(btnInstallTop) btnInstallTop.addEventListener('click', () => openModal('installIconModal'));
+      const btnCloseInstall = document.getElementById('btnCloseInstallIconModal');
+      if(btnCloseInstall) btnCloseInstall.addEventListener('click', () => closeModal('installIconModal'));
+      
+      // زر مشاركة الشريك
+      const btnPartner = document.getElementById('btnScreenIconPartner');
+      if(btnPartner) btnPartner.addEventListener('click', () => openModal('partnerShareModal'));
+      const btnPartnerTop = document.getElementById('btnPartnerShareModal');
+      if(btnPartnerTop) btnPartnerTop.addEventListener('click', () => openModal('partnerShareModal'));
+      const btnPartnerMobile = document.getElementById('btnMobilePartnerOpen');
+      if(btnPartnerMobile) btnPartnerMobile.addEventListener('click', () => openModal('partnerShareModal'));
+      const btnClosePartner = document.getElementById('btnClosePartnerModal');
+      if(btnClosePartner) btnClosePartner.addEventListener('click', () => closeModal('partnerShareModal'));
+      
+      // سلة المحذوفات
+      const btnTrash = document.getElementById('btnOpenTrashModal');
+      if(btnTrash) btnTrash.addEventListener('click', () => openModal('trashModal'));
+      const btnCloseTrash = document.getElementById('btnCloseTrashModal');
+      if(btnCloseTrash) btnCloseTrash.addEventListener('click', () => closeModal('trashModal'));
+
+      // الإعدادات
+      const btnSettings = document.getElementById('btnSettingsModal');
+      if(btnSettings) btnSettings.addEventListener('click', () => openModal('settingsModal'));
+      const btnCloseSettings = document.getElementById('btnCloseSettingsModal');
+      if(btnCloseSettings) btnCloseSettings.addEventListener('click', () => closeModal('settingsModal'));
+
+      // زر العودة للرئيسية العائم
+      const btnFloatingHome = document.getElementById('btnFloatingHomeGrid');
+      if(btnFloatingHome) {
+        btnFloatingHome.addEventListener('click', () => {
+           switchTab('dashboard');
+           window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
+
+    });
+  
+    // ==================== BARCODE CAMERA SCANNER LOGIC ====================
+    let html5QrcodeScanner = null;
+    
+    document.getElementById('btnStartCameraScanner')?.addEventListener('click', () => {
+        const scannerModal = document.getElementById('cameraScannerModal');
+        scannerModal.classList.remove('hidden');
+        scannerModal.classList.add('flex');
+        
+        if (!html5QrcodeScanner) {
+            html5QrcodeScanner = new Html5Qrcode("reader");
+        }
+        
+        const config = { fps: 10, qrbox: { width: 250, height: 100 } };
+        
+        html5QrcodeScanner.start(
+            { facingMode: "environment" }, // back camera
+            config,
+            (decodedText, decodedResult) => {
+                // Success callback
+                if(html5QrcodeScanner.isScanning) {
+                    html5QrcodeScanner.stop().then(() => {
+                        scannerModal.classList.add('hidden');
+                        scannerModal.classList.remove('flex');
+                        
+                        const searchInput = document.getElementById('barcodeSearchInput');
+                        if (searchInput) {
+                            searchInput.value = decodedText;
+                            const triggerBtn = document.getElementById('btnTriggerBarcodeLookup');
+                            if (triggerBtn) triggerBtn.click();
+                            showToast('✅ تم مسح الباركود بنجاح');
+                        }
+                    }).catch(err => console.log(err));
+                }
+            },
+            (errorMessage) => {
+                // Parse error, ignore
+            }
+        ).catch(err => {
+            alert(`تعذر الوصول للكاميرا! \n\nللسماح للكاميرا:\n1. تأكد أن المتصفح (Chrome/Safari) لديه إذن استخدام الكاميرا في إعدادات هاتفك.\n2. إذا ظهر لك إشعار يطلب الصلاحية، اختر السماح (Allow).\n3. الكاميرا تعمل فقط إذا كان الموقع آمناً (https) أو عند فتح التطبيق من الشاشة الرئيسية.`);
+            scannerModal.classList.add('hidden');
+            scannerModal.classList.remove('flex');
+        });
+    });
+
+    document.getElementById('btnCloseScannerModal')?.addEventListener('click', () => {
+        const scannerModal = document.getElementById('cameraScannerModal');
+        if (html5QrcodeScanner && html5QrcodeScanner.isScanning) {
+            html5QrcodeScanner.stop().then(() => {
+                scannerModal.classList.add('hidden');
+                scannerModal.classList.remove('flex');
+            }).catch(err => {
+                scannerModal.classList.add('hidden');
+                scannerModal.classList.remove('flex');
+            });
+        } else {
+            scannerModal.classList.add('hidden');
+            scannerModal.classList.remove('flex');
+        }
+    });
+  
+    // ==================== BARCODE LOOKUP LOGIC ====================
+    document.getElementById('btnTriggerBarcodeLookup')?.addEventListener('click', () => {
+        const query = (document.getElementById('barcodeSearchInput').value || '').trim().toLowerCase();
+        if (!query) return;
+
+        // Find hive by barcode, id, or exact name
+        const foundHive = appState.hives.find(h => 
+            (h.barcode && h.barcode.toLowerCase() === query) || 
+            h.id.toLowerCase() === query || 
+            h.name.toLowerCase() === query ||
+            h.name.toLowerCase().includes(query)
+        );
+
+        if (foundHive) {
+            // Switch to inspector tab
+            switchTab('inspector');
+            // Set the dropdown to the found hive
+            const inspSelect = document.getElementById('inspHiveSelect');
+            if (inspSelect) {
+                inspSelect.value = foundHive.id;
+                // Trigger change event to sync sliders
+                inspSelect.dispatchEvent(new Event('change'));
+            }
+            showToast(`✅ تم فتح الخلية: ${foundHive.name}`);
+        } else {
+            showToast(`❌ لم يتم العثور على خلية تطابق: ${query}`);
+        }
+    });
+
+    // Sync sliders when a hive is selected in the inspector dropdown
+    document.getElementById('inspHiveSelect')?.addEventListener('change', syncInspectorSlidersFromSelectedHive);
+
   </script>
 </body>
 </html>
